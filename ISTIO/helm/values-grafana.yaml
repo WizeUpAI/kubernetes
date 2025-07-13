@@ -1,5 +1,6 @@
 # values for kube-prometheus-stack with dashboards
 # Active Prometheus Operator et Prometheus
+# we can add k8s/configmap.yml to manage the grafana dashboards as code in yml file
 prometheusOperator:
   enabled: true
 
