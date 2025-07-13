@@ -1,1 +1,53 @@
 # values for kube-prometheus-stack with dashboards
+# Active Prometheus Operator et Prometheus
+prometheusOperator:
+  enabled: true
+
+prometheus:
+  enabled: true
+  service:
+    type: ClusterIP
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    evaluationInterval: 15s
+
+# Active Grafana avec dashboards et sidecar pour les dashboards configmaps
+grafana:
+  enabled: true
+  service:
+    type: LoadBalancer
+    port: 3000
+  adminUser: admin
+  adminPassword: prom-operator
+  ingress:
+    enabled: false
+  dashboards:
+    default:
+      # Import dashboards depuis configmaps
+      example-dashboard.json:
+        gnetId: 1860    # Kubernetes cluster monitoring (Prometheus)
+        revision: 23
+        datasource: Prometheus
+
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+    datasources:
+      enabled: true
+      label: grafana_datasource
+
+# Datasources (Prometheus)
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus-server.default.svc.cluster.local
+        isDefault: true
+
+# ServiceMonitor pour scrapping custom si besoin
+prometheus:
+  serviceMonitorSelectorNilUsesHelmValues: false

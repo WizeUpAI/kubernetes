@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: custom-grafana-dashboard
+  labels:
+    grafana_dashboard: "1"
+data:
+  custom-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "type": "dashboard"
+          }
+        ]
+      },
+      "title": "My Custom Dashboard",
+      "panels": [
+        {
+          "type": "graph",
+          "title": "Example Panel",
+          "targets": [
+            {
+              "expr": "up",
+              "legendFormat": "{{instance}}"
+            }
+          ]
+        }
+      ],
+      "schemaVersion": 22,
+      "version": 1
+    }
