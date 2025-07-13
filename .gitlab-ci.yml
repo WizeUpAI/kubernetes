@@ -1,0 +1,9 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  script:
+    - ssh user@your-server 'cd /path/to/project && git pull && docker-compose down && docker-compose up -d'
+  only:
+    - main
