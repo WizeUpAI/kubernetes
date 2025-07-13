@@ -1,0 +1,14 @@
+stages:
+  - terraform
+
+terraform-init:
+  image: hashicorp/terraform:latest
+  script:
+    - terraform init
+
+terraform-apply:
+  image: hashicorp/terraform:latest
+  script:
+    - terraform apply -auto-approve
+  only:
+    - main
