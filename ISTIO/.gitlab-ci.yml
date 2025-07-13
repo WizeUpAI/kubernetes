@@ -1,0 +1,21 @@
+stages:
+  - validate
+  - deploy
+
+validate:
+  stage: validate
+  script:
+    - terraform -chdir=terraform init
+    - terraform -chdir=terraform validate
+
+deploy:
+  stage: deploy
+  script:
+    - terraform -chdir=terraform apply -auto-approve
+    - helm upgrade --install monitoring prometheus-community/kube-prometheus-stack -f helm/values-grafana.yaml
+    - helm upgrade --install otel opentelemetry-helm/opentelemetry-collector -f helm/values-otel-collector.yaml
+    - docker build -t registry.example.com/fastapi-app ./fastapi-app
+    - docker push registry.example.com/fastapi-app
+    - kubectl apply -f k8s/
+  only:
+    - main

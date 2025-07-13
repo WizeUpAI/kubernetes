@@ -1,0 +1,12 @@
+config:
+  exporters:
+    googlecloud:
+      project: "your-gcp-project-id"
+  service:
+    pipelines:
+      traces:
+        receivers: [otlp]
+        exporters: [googlecloud]
+      logs:
+        receivers: [otlp]
+        exporters: [googlecloud]
